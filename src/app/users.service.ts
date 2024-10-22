@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { CounterService } from './counter.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ export class UsersService {
   private activeUsers = ['Max', 'Anna'];
   private inactiveUsers = ['Chris', 'Manu'];
 
-  constructor() {}
+  constructor(private counterService: CounterService) {}
 
   public initValues() {
     this.activeUsers$$.next(this.activeUsers);
@@ -30,6 +31,7 @@ export class UsersService {
     this.inactiveUsers$$.next(this.inactiveUsers);
     this.activeUsers = this.activeUsers.filter((x) => x !== user);
     this.activeUsers$$.next(this.activeUsers);
+    this.counterService.moveActiveToInactive();
   }
 
   setUserToActive(user: string) {
@@ -37,5 +39,6 @@ export class UsersService {
     this.activeUsers$$.next(this.activeUsers);
     this.inactiveUsers = this.inactiveUsers.filter((x) => x !== user);
     this.inactiveUsers$$.next(this.inactiveUsers);
+    this.counterService.moveInactiveToActive();
   }
 }
